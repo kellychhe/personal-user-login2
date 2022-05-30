@@ -1,0 +1,129 @@
+<!doctype html>
+<html>
+<head>
+  <title>Job Postings</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+
+    <div class="page-header text-center">
+        <h1>Post Open Jobs Here!</h1>
+    </div>
+
+    <div class="row">
+
+        <!-- LOCAL INFORMATION -->
+      <div class="card formBorder bg-secondary text-light px-5 py-3 text-center">
+          <h2>Add a Job Listing</h2>
+        <% if (user.local.email) { %>
+          <form class="d-flex flex-sm-column" action="/jobListings" method="POST">
+            <div>
+            <input class="boldInput" type="text" placeholder="position" name="positionTitle">
+            <input class="boldInput" type="text" placeholder="company" name="companyName">
+            </div>
+            <div class="my-2">
+            <label for="city">Location: </label>
+            <input class="boldInput" type="text" placeholder="city" name="city">
+            <input class="boldInput" type="text" placeholder="state" name="state">
+            <input class="boldInput" type="text" placeholder="country" name="country">
+            </div>
+            <div>
+            <label for="contact">Who to Contact: </label>
+            <input class="boldInput" type="text" value="<%= user.local.email %>" id="contact" name="contact">
+          </div>
+            <div class=" d-flex justify-content-evenly my-2">
+            <div class="card formBorder bg-light text-dark d-flex flex-row align-items-center px-1">
+              <input type="checkbox" name="employmentStatus" id="fullTime" value="full-time">
+              <label for="fullTime">full-time</label>
+            </div>
+            <div class="card formBorder bg-light text-dark d-flex flex-row align-items-center px-1">
+              <input type="checkbox" name="employmentStatus" id="partTime" value="part-time">
+              <label for="partTime">part-time</label>
+            </div>
+            <div class="card formBorder bg-light text-dark d-flex flex-row align-items-center px-1">
+              <input type="checkbox" name="employmentStatus" id="contract" value="contract">
+              <label for="contract">contract</label>
+            </div>
+            <div class="card formBorder bg-light text-dark d-flex flex-row align-items-center px-1">
+              <input type="checkbox" name="employmentStatus" id="other" value="other">
+              <label for="other">other</label>
+            </div>
+            </div>
+            <textarea class="boldInput" name="companyDescription" placeholder="Describe the company" cols="30" rows="5"></textarea>
+            <textarea class="boldInput my-2" name="positionDescription" placeholder="Describe the position" cols="30" rows="5"></textarea>
+            <textarea class="boldInput" name="requirements" placeholder="Describe the requirements" cols="30" rows="5"></textarea>
+
+            
+            <button type="submit" class="btn d-block mt-3">Submit</button>
+          </form>
+        </div>
+
+          <h3 class="h1 my-4 text-center">Job Listings</h3>
+          <% for (let i = 0; i < jobListings.length; i++){%>
+            <div class="card bg-light p-3 col-md-6">
+            <section id="<%=jobListings[i]._id%>" class="<%= jobListings[i].positionFilled ? 'filled' : '' %>">
+              <div class="text-center">
+              <h2 class="m-0"><%= jobListings[i].positionTitle %></h2>
+              <h4 class="m-0"><%= jobListings[i].companyName %></h4>
+              <p class="m-0"><%= jobListings[i].city %>, <%= jobListings[i].state %> <%= jobListings[i].country %></p>
+              <span><%= jobListings[i].employmentStatus %></span>
+            </div>
+              <h5 class="mt-3 mb-0">Company Background</h5>
+              <p><%= jobListings[i].companyDescription %></p>
+              <h5 class="mb-0">Position Summary</h5>
+              <p><%= jobListings[i].positionDescription %></p>
+              <h5 class="mb-0">Required Skills</h5>
+              <p><%= jobListings[i].requirements %></p>
+              <section class="formBorder card bg-secondary text-light p-3">
+                <h5 class="underline">Comments:</h5>
+                <% for (let j = 0; j < jobListings[i].comments.length; j++){ %>
+                  <div class="<%=j%> mt-0">
+                    <span class="underline"><%=jobListings[i].comments[j].name%></span>
+                    <!-- <span><i class="fa fa-ban" aria-hidden="true"></i></span> -->
+                    <p class="commentText mb-1"><%=jobListings[i].comments[j].comment%></p>
+                  </div>
+                  <% } %>
+                </section>
+              <form class="input-group my-2" action="/comments" method="post">
+                <input type="hidden" name="hiddenId" value="<%=jobListings[i]._id%>">
+                <input class="commentInput" type="text" value="<%= user.local.email %>" name="name">
+                <textarea class="commentInput" name="comment" placeholder="add a comment" cols="30" rows="1"></textarea>
+                <button class="btn">Comment</button>
+              </form>
+              <button class="btn delete">Delete Post</button>
+              <button class="btn positionFilled">Position Filled</button>
+            </section>
+          </div>
+          <% } %>
+        <% } %>
+
+        <div class="card bg-light p-3 mt-3 text-center">
+          <h3><span class="fa fa-user"></span>Staff</h3>
+
+          <% if (user.local.email) { %>
+              <p>
+                  <strong>Staff-id</strong>: <%= user._id %><br>
+                  <strong>email</strong>: <%= user.local.email %><br>
+                  <strong>password</strong>: <%= user.local.password %>
+              </p>
+              <div>
+              <a href="/unlink/local" class="btn btn-default">Unlink</a>
+              <a href="/logout" class="btn btn-default btn-sm">Logout</a>
+            </div>
+          <% } else { %>
+            <div>
+              <a href="/connect/local" class="btn btn-default">Connect Local</a>
+              <a href="/logout" class="btn btn-default btn-sm">Logout</a>
+            </div>
+          <% } %>
+      </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+<script src="main.js"></script>
+
+</body>
+</html>
+ 
