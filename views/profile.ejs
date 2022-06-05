@@ -16,54 +16,54 @@
     <div class="row">
 
         <!-- LOCAL INFORMATION -->
-      <div class="card formBorder bg-secondary text-light px-5 py-3 text-center">
+      <div class="card formBorder px-5 py-3 text-center">
           <h2>Add a Job Listing</h2>
         <% if (user.local.email) { %>
           <form class="d-flex flex-sm-column" action="/jobListings" method="POST">
             <div>
-            <input class="boldInput" type="text" placeholder="position" name="positionTitle">
-            <input class="boldInput" type="text" placeholder="company" name="companyName">
+              <input class="boldInput" type="text" placeholder="position" name="positionTitle">
+              <input class="boldInput" type="text" placeholder="company" name="companyName">
             </div>
             <div class="my-2">
-            <label for="city">Location: </label>
-            <input class="boldInput" type="text" placeholder="city" name="city">
-            <input class="boldInput" type="text" placeholder="state" name="state">
-            <input class="boldInput" type="text" placeholder="country" name="country">
+              <label for="city">Location: </label>
+              <input class="boldInput" type="text" placeholder="city" name="city">
+              <input class="boldInput" type="text" placeholder="state" name="state">
+              <input class="boldInput" type="text" placeholder="country" name="country">
             </div>
             <div>
-            <label for="contact">Who to Contact: </label>
-            <input class="boldInput" type="text" value="<%= user.local.email %>" id="contact" name="contact">
-          </div>
+              <label for="contact">Who to Contact: </label>
+              <input class="boldInput" type="text" value="<%= user.local.email %>" id="contact" name="contact">
+            </div>
             <div class=" d-flex justify-content-evenly my-2">
-            <div class="card formBorder bg-light text-dark d-flex flex-row align-items-center px-1">
-              <input type="checkbox" name="employmentStatus" id="fullTime" value="full-time">
-              <label for="fullTime">full-time</label>
+              <div class="card formBorder bg-light text-dark d-flex flex-row align-items-center px-1">
+                <input type="checkbox" name="employmentStatus" id="fullTime" value="full-time">
+                <label for="fullTime">full-time</label>
+              </div>
+              <div class="card formBorder bg-light text-dark d-flex flex-row align-items-center px-1">
+                <input type="checkbox" name="employmentStatus" id="partTime" value="part-time">
+                <label for="partTime">part-time</label>
+              </div>
+              <div class="card formBorder bg-light text-dark d-flex flex-row align-items-center px-1">
+                <input type="checkbox" name="employmentStatus" id="contract" value="contract">
+                <label for="contract">contract</label>
+              </div>
+              <div class="card formBorder bg-light text-dark d-flex flex-row align-items-center px-1">
+                <input type="checkbox" name="employmentStatus" id="other" value="other">
+                <label for="other">other</label>
+              </div>
             </div>
-            <div class="card formBorder bg-light text-dark d-flex flex-row align-items-center px-1">
-              <input type="checkbox" name="employmentStatus" id="partTime" value="part-time">
-              <label for="partTime">part-time</label>
-            </div>
-            <div class="card formBorder bg-light text-dark d-flex flex-row align-items-center px-1">
-              <input type="checkbox" name="employmentStatus" id="contract" value="contract">
-              <label for="contract">contract</label>
-            </div>
-            <div class="card formBorder bg-light text-dark d-flex flex-row align-items-center px-1">
-              <input type="checkbox" name="employmentStatus" id="other" value="other">
-              <label for="other">other</label>
-            </div>
-            </div>
-            <textarea class="boldInput" name="companyDescription" placeholder="Describe the company" cols="30" rows="5"></textarea>
-            <textarea class="boldInput my-2" name="positionDescription" placeholder="Describe the position" cols="30" rows="5"></textarea>
-            <textarea class="boldInput" name="requirements" placeholder="Describe the requirements" cols="30" rows="5"></textarea>
+            <textarea class="boldInput" name="companyDescription" placeholder="Describe the company" cols="30" rows="3"></textarea>
+            <textarea class="boldInput my-2" name="positionDescription" placeholder="Describe the position" cols="30" rows="3"></textarea>
+            <textarea class="boldInput" name="requirements" placeholder="Describe the requirements" cols="30" rows="3"></textarea>
 
             
-            <button type="submit" class="btn d-block mt-3">Submit</button>
+            <button type="submit" class="submit btn d-block mt-3">Submit</button>
           </form>
         </div>
 
           <h3 class="h1 my-4 text-center">Job Listings</h3>
           <% for (let i = 0; i < jobListings.length; i++){%>
-            <div class="card bg-light p-3 col-md-6">
+            <div class="jobCard card p-3 col-md-6">
             <section id="<%=jobListings[i]._id%>" class="<%= jobListings[i].positionFilled ? 'filled' : '' %>">
               <div class="text-center">
               <h2 class="m-0"><%= jobListings[i].positionTitle %></h2>
@@ -77,10 +77,10 @@
               <p><%= jobListings[i].positionDescription %></p>
               <h5 class="mb-0">Required Skills</h5>
               <p><%= jobListings[i].requirements %></p>
-              <section class="formBorder card bg-secondary text-light p-3">
+              <section class=" card commentCard text-dark p-3">
                 <h5 class="underline">Comments:</h5>
                 <% for (let j = 0; j < jobListings[i].comments.length; j++){ %>
-                  <div class="<%=j%> mt-0">
+                  <div class="<%=j%> mt-0 ">
                     <span class="underline"><%=jobListings[i].comments[j].name%></span>
                     <!-- <span><i class="fa fa-ban" aria-hidden="true"></i></span> -->
                     <p class="commentText mb-1"><%=jobListings[i].comments[j].comment%></p>
